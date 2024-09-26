@@ -20,47 +20,46 @@ import {
 	defaultArticleState,
 } from 'src/constants/articleProps';
 
-
 export type TSettingsForm = {
 	setSettingsState: (value: ArticleStateType) => void;
-}
+};
 
 export const ArticleParamsForm = (props: TSettingsForm) => {
-
 	const { setSettingsState } = props;
 
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const [formState, setFormState] =
 		useState<ArticleStateType>(defaultArticleState);
 
-
-		const handleChange = (fieldName: string) => {
-			return (value: OptionType) => {
-				setFormState((currentFormState) => ({
-					...currentFormState,
-					[fieldName]: value,
-				}));
-			};
+	const handleChange = (fieldName: string) => {
+		return (value: OptionType) => {
+			setFormState((currentFormState) => ({
+				...currentFormState,
+				[fieldName]: value,
+			}));
 		};
+	};
 
-		const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-			event.preventDefault();
+	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
 
-			setSettingsState(formState);
-		};
+		setSettingsState(formState);
+	};
 
-		const handleReset = (event: FormEvent<HTMLFormElement>) => {
-			event.preventDefault();
+	const handleReset = (event: FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
 
-			setFormState(defaultArticleState);
-			setSettingsState(defaultArticleState);
-		};
+		setFormState(defaultArticleState);
+		setSettingsState(defaultArticleState);
+	};
 
 	return (
 		<>
 			<ArrowButton
 				isOpen={isOpen}
-				onClick={() => {setIsOpen((current) => !current)}}
+				onClick={() => {
+					setIsOpen((current) => !current);
+				}}
 			/>
 			<div
 				onClick={() => setIsOpen(false)}
@@ -113,7 +112,6 @@ export const ArticleParamsForm = (props: TSettingsForm) => {
 					</div>
 				</form>
 			</aside>
-
 		</>
 	);
 };

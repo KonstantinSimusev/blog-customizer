@@ -10,16 +10,15 @@ import { Article } from './components/article';
 
 import {
 	ArticleStateType,
-	defaultArticleState
+	defaultArticleState,
 } from './constants/articleProps';
-
 
 const domNode = document.getElementById('root') as HTMLDivElement;
 const root = createRoot(domNode);
 
 const App = () => {
 	const [appState, setAppState] =
-	useState<ArticleStateType>(defaultArticleState);
+		useState<ArticleStateType>(defaultArticleState);
 
 	return (
 		<main
