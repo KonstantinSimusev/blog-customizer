@@ -1,4 +1,4 @@
-import { useState, FormEvent } from 'react';
+import { useState, useEffect, FormEvent, useRef } from 'react';
 import clsx from 'clsx';
 import styles from './ArticleParamsForm.module.scss';
 
@@ -27,9 +27,24 @@ export type TSettingsForm = {
 export const ArticleParamsForm = (props: TSettingsForm) => {
 	const { setSettingsState } = props;
 
+	const asideRef = useRef<HTMLElement>(null);
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const [formState, setFormState] =
 		useState<ArticleStateType>(defaultArticleState);
+
+	useEffect(() => {
+		const handleClick = (event: MouseEvent) => {
+			if (event.target instanceof Node && !asideRef.current?.contains(event.target)) {
+				setIsOpen(current => !current);
+			}
+		};
+
+		window.addEventListener('click', handleClick);
+
+		return () => {
+			window.removeEventListener('click', handleClick);
+		};
+	}, [isOpen]);
 
 	const handleChange = (fieldName: string) => {
 		return (value: OptionType) => {
@@ -57,15 +72,10 @@ export const ArticleParamsForm = (props: TSettingsForm) => {
 		<>
 			<ArrowButton
 				isOpen={isOpen}
-				onClick={() => {
-					setIsOpen((current) => !current);
-				}}
-			/>
-			<div
-				onClick={() => setIsOpen(false)}
-				className={clsx(styles.overlay, { [styles.overlay_open]: isOpen })}
+				onClick={() => {}}
 			/>
 			<aside
+				ref={asideRef}
 				className={clsx(styles.container, { [styles.container_open]: isOpen })}>
 				<form
 					onSubmit={handleSubmit}
