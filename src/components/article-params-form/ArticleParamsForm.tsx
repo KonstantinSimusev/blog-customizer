@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEvent, useRef } from 'react';
+import { useState, FormEvent, useRef } from 'react';
 import clsx from 'clsx';
 import styles from './ArticleParamsForm.module.scss';
 
@@ -20,6 +20,8 @@ import {
 	defaultArticleState,
 } from 'src/constants/articleProps';
 
+import { useOutsideClick } from './hooks/useOutsideClick';
+
 export type TSettingsForm = {
 	setSettingsState: (value: ArticleStateType) => void;
 };
@@ -27,24 +29,19 @@ export type TSettingsForm = {
 export const ArticleParamsForm = (props: TSettingsForm) => {
 	const { setSettingsState } = props;
 
-	const asideRef = useRef<HTMLElement>(null);
-	const [isOpen, setIsOpen] = useState<boolean>(false);
+	const menuRef = useRef<HTMLElement>(null);
+	const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+
 	const [formState, setFormState] =
 		useState<ArticleStateType>(defaultArticleState);
 
-	useEffect(() => {
-		const handleClick = (event: MouseEvent) => {
-			if (event.target instanceof Node && !asideRef.current?.contains(event.target)) {
-				setIsOpen(current => !current);
-			}
-		};
-
-		window.addEventListener('click', handleClick);
-
-		return () => {
-			window.removeEventListener('click', handleClick);
-		};
-	}, [isOpen]);
+	useOutsideClick({
+		isMenuOpen,
+		menuRef,
+		onMenuClose: () => {
+			setIsMenuOpen(!isMenuOpen);
+		}
+	});
 
 	const handleChange = (fieldName: string) => {
 		return (value: OptionType) => {
@@ -71,12 +68,12 @@ export const ArticleParamsForm = (props: TSettingsForm) => {
 	return (
 		<>
 			<ArrowButton
-				isOpen={isOpen}
-				onClick={() => {}}
+				isOpen={isMenuOpen}
+				onClick={() => setIsMenuOpen(!isMenuOpen)}
 			/>
 			<aside
-				ref={asideRef}
-				className={clsx(styles.container, { [styles.container_open]: isOpen })}>
+				ref={menuRef}
+				className={clsx(styles.container, { [styles.container_open]: isMenuOpen })}>
 				<form
 					onSubmit={handleSubmit}
 					onReset={handleReset}
